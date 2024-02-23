@@ -3,7 +3,8 @@ import java.util.Scanner;
 
 public class Menu {
     int choix;
-    City city = new City();
+    Admin admin = new Admin();
+    User user = new User();
     public static Scanner scanner = new Scanner(System.in);
     public void menuPrincipal() throws SQLException, ClassNotFoundException {
         System.out.println("--------------------- Menu principal ----------------------");
@@ -45,25 +46,42 @@ public class Menu {
         switch (choix)
         {
             case 1 :
-                city.addCity(Connecter.getconnection());
+                if(!admin.addCity(Connecter.getconnection()))
+                {
+                   menuAdmin();
+                }
+                user.showAllCity(Connecter.getconnection());
                 menuAdmin();
                 break;
             case 2 :
-                city.updateCity(Connecter.getconnection());
+                if(!admin.updateCity(Connecter.getconnection())){
+                    menuAdmin();
+                }
+                user.showAllCity(Connecter.getconnection());
                 menuAdmin();
                 break;
             case 3 :
-                city.deleteCity(Connecter.getconnection());
+                if(!admin.deleteCity(Connecter.getconnection())){
+                    menuAdmin();
+                }
+                user.showAllCity(Connecter.getconnection());
                 menuAdmin();
                 break;
             case 4 :
-                System.out.println("\t4- AJOUTER UNE HISTORIQUE ");
+                admin.addHistory(Connecter.getconnection());
+                menuAdmin();
                 break;
             case 5 :
-                System.out.println("\t5- MODIFIER UNE HISTORIQUE  ");
+                if(!admin.updateHistory(Connecter.getconnection())){
+                    menuAdmin();
+                }
+                menuAdmin();
                 break;
             case 6 :
-                System.out.println("\t6- SUPPRIMER UNE HISTORIQUE ");
+                if(!admin.deleteHistory(Connecter.getconnection())){
+                    menuAdmin();
+                }
+                menuAdmin();
                 break;
             case 7 :
                 menuPrincipal();
@@ -75,13 +93,13 @@ public class Menu {
         }
     }
     public void menuUser() throws SQLException, ClassNotFoundException {
-        System.out.println("--------------------- Menu USER ----------------------");
+        System.out.println("------------------------------- Menu USER --------------------------------");
         System.out.println("\t1- AFFICHER LES VILLES ");
         System.out.println("\t2- RECHERCHER UNE VILLE ");
         System.out.println("\t3- AFFICHER LES PREVISION METEOROLOGIQUES ACTUELLES D UNE VILLE ");
         System.out.println("\t4- AFFICHER L HISTORIQUE METEOROLOGIQUES D UNE VILLE ");
-        System.out.println("\t5- Retour au menu principal");
-        System.out.println("------------------------------------------------------");
+        System.out.println("\t5- RETOUR AU MENU PRINCIPAL ");
+        System.out.println("--------------------------------------------------------------------------");
         System.out.print("CHOISISSEZ : ");choix=scanner.nextInt();
         choiceMenuUser(choix);
     }
@@ -89,18 +107,26 @@ public class Menu {
         switch (choix)
         {
             case 1 :
-                city.showAllCity(Connecter.getconnection());
+                user.showAllCity(Connecter.getconnection());
                 menuUser();
                 break;
             case 2 :
-                city.searchCity(Connecter.getconnection());
+                if(!user.searchCity(Connecter.getconnection())){
+                    menuUser();
+                }
                 menuUser();
                 break;
             case 3 :
-                System.out.println("\t3- AFFICHER LES PREVISION METEOROLOGIQUES ACTUELLES D UNE VILLE ");
+                if(!user.temperatureNowOfCity(Connecter.getconnection())){
+                    menuUser();
+                }
+                menuUser();
                 break;
             case 4 :
-                System.out.println("\t4- AFFICHER L HISTORIQUE METEOROLOGIQUES D UNE VILLE ");
+                if(!user.historyOfCity(Connecter.getconnection())){
+                    menuUser();
+                }
+                menuUser();
                 break;
             case 5 :
                 menuPrincipal();
